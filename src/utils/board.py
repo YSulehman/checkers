@@ -7,7 +7,7 @@ class Board:
     def __init__(self):
         pass
 
-    def make_board(self, display, dimension: int, block_width: int):
+    def make_board(self, display: pygame.surface.Surface, dimension: int, block_width: int) -> None:
         """
         makes the board on display, dimension is window size (width = height),
         block_width (=block_height). number_rows (& number_cols) = dimension // block_width
