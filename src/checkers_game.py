@@ -19,6 +19,8 @@ class Checkers(Board, Pieces):
 
         # make checkboard display
         self.make_board(self.display, self.window_width, self.block_width)
+        # add pieces to board
+        self.set_initial_pieces(self.display, self.window_width, self.block_width)
 
         # update display
         pygame.display.update()
