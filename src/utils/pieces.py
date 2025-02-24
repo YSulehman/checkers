@@ -2,7 +2,9 @@ import pygame
 
 class Pieces:
     team_one_colour = (165,42,42)
-    team_two_colour = (255,255,255)
+    # team_two_colour = (255,255,255)
+    team_two_colour = (34, 139, 34)
+    black_colour = (0,0,0)
     def __init__(self):
         pass
 
@@ -50,15 +52,91 @@ class Pieces:
             self._draw_piece(display, self.team_two_colour, point[1:], self.piece_radius)
 
         
-
     def _draw_piece(self, display, colour, coordinate, radius):
         pygame.draw.circle(display, colour, coordinate, radius)
 
-    def remove_piece(self):
+    def _remove_piece(self, display, colour, coordinate, block_width):
+        # pygame.draw.Rect(coordinate[0], coordinate[1], block_width, block_width)
+        pygame.draw.rect(
+        display, 
+        colour, 
+        (
+            int(coordinate[0] - block_width // 2), 
+            int(coordinate[1] - block_width // 2), 
+            int(block_width), 
+            int(block_width)
+        )
+    )
+
+    def _move_piece(self, display, colour, team_coordinates: list[tuple], current_point: tuple, new_point: tuple, block_width: int):
+        """
+        draws new piece (colour corresponding to correct team) based on new point. 
+        """
+       # Find the correct tuple and remove it
+        team_coordinates[:] = [item for item in team_coordinates if not (item[1] == current_point[1] and item[2] == current_point[2])]
+        # for item in team_coordinates:
+        #     if item[1] == current_point[1] and item[2] == current_point[2]:  # Match x, y
+        #         team_coordinates.remove(item)
+        #         break  # Exit loop once removed
+
+        # Compute new coordinates
+        new_y = current_point[2] + block_width
+        if new_point[0] < current_point[1]:
+            new_x = current_point[1] - block_width
+        else:
+            new_x = current_point[1] + block_width
+
+        # Add the updated piece
+        team_coordinates.append(('normal', new_x, new_y))
+        # draw new circle last 
+        self._remove_piece(display, self.black_colour, current_point[1:], block_width)
+        self._draw_piece(display, colour, (new_x, new_y), self.piece_radius)
+        # self._remove_piece(display, self.black_colour, current_point[1:], block_width)
+        
+
+    def valid_take_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
         pass
 
-    def move_piece(self):
-        pass
+    def valid_normal_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
+        """
+        given current position, checks if new position is valid based on team and normal/king piece.
+        """
+        if king:
+            pass
+        else:
+            # now break into team one and team two
+            if team_one:
+                # standard move (not taking)
+                # first inequality checks valid y-coord within limits,
+                # second inequality checks valid x-coord within limits.
+                if block_width / 2 <= new_position[1] - current_position[1] <= 3 / 2 * block_width and abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+                    # return True if the square is free and not occupied (by either same team piece of opposing team)
+                    for point in self.team_one_initial_coordinates:
+                        if point == current_position:
+                            continue
+                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self. piece_radius:
+                            return False
+                    for point in self.team_two_initial_coordinates:
+                        if point == current_position:
+                            continue
+                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self. piece_radius:
+                            return False 
+                    return True  
+                
+            if not team_one:
+                # same logic as for team one, except new y-coord should be less than current
+                if block_width / 2  <= current_position[1] - new_position[1] <= 3 / 2 * block_width and abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+                    # return True if the square is free and not occupied (by either same team piece of opposing team)
+                    for point in self.team_one_initial_coordinates:
+                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self.piece_radius:
+                            return False
+                    for point in self.team_two_initial_coordinates:
+                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self.piece_radius:
+                            return False 
+                    return True 
+        return False
+            
+
 
     def make_king(self):
         pass
