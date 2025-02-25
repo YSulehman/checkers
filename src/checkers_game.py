@@ -10,11 +10,6 @@ class Checkers(Board, Pieces):
         self.block_width = self.window_width // 8
         # initialise team one to move first
         self.team_ones_move = True
-        # self.last_moved = None
-        # set duration to display messages in milliseconds
-        # self.message_duration = 2000
-        # self.message_time = None
-        # self.show_message = False
 
     def play_game(self):
         # initialise a game 
@@ -80,15 +75,10 @@ class Checkers(Board, Pieces):
                                 # update self.team_one_turn
                                 self.team_ones_move = True
                                 
-                                
                         else:
                             pass
-                            # let's display a message to screen for invalid move but for 2 seconds
-                            # if not self.show_message:
-                            #     self.message_time = game_time
-                            #     self.show_message = True
+                           
                     
-
                         # Reset selection after move
                         self.selected_piece = None
                         pygame.display.update()
@@ -98,14 +88,6 @@ class Checkers(Board, Pieces):
                 elif event.type == pygame.MOUSEMOTION:
                     pass
 
-                
-            # if self.show_message and  game_time - self.message_time < self.message_duration:
-            #     # print(game_time - self.message_time)
-            #     # if game_time - self.message_time < self.message_duration:
-            #     self._display_message('Invalid move!')
-            #     pygame.display.update()
-            # else:
-            #     self.show_message = False
                   
     def _display_message(self, text: str):
         # render text and box containing text
