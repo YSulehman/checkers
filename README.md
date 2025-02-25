@@ -1,8 +1,11 @@
 # Checkers game 
-An implementation of checkers using the pygame library. 
+An implementation of checkers using the pygame library. In progress...
 
-## Core Functionalities
-```checkers_game.py``` contains code to run an instance of the game. 
+## Installation
+In a new conda environment, run the following command: ```pip install -r requirements.txt```.
+
+## Instructions for use.
+To launch a game by run the following command: ```python main.py```. The main game logic is handled in ```src/checkers_game.py```.
 
 ## TO DO CHECKLIST
 
