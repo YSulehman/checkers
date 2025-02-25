@@ -68,9 +68,9 @@ class Pieces:
         )
     )
 
-    def _move_piece(self, display, colour, team_coordinates: list[tuple], current_point: tuple, new_point: tuple, block_width: int):
+    def _move_piece(self, display, colour, team_coordinates: list[tuple], current_point: tuple, new_point: tuple, block_width: int, team_one_turn: bool):
         """
-        draws new piece (colour corresponding to correct team) based on new point. 
+        draws new piece (colour corresponding to correct team) based on new point. current_point e.g. : ('normal, x, y)
         """
        # Find the correct tuple and remove it
         team_coordinates[:] = [item for item in team_coordinates if not (item[1] == current_point[1] and item[2] == current_point[2])]
@@ -80,7 +80,10 @@ class Pieces:
         #         break  # Exit loop once removed
 
         # Compute new coordinates
-        new_y = current_point[2] + block_width
+        if team_one_turn:
+            new_y = current_point[2] + block_width
+        else:
+            new_y = current_point[2] - block_width
         if new_point[0] < current_point[1]:
             new_x = current_point[1] - block_width
         else:

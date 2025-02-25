@@ -10,6 +10,7 @@ class Checkers(Board, Pieces):
         self.block_width = self.window_width // 8
         # initialise team one to move first
         self.team_ones_move = True
+        self.last_moved = 'one'
 
     def play_game(self):
         # initialise a game 
@@ -41,13 +42,14 @@ class Checkers(Board, Pieces):
                         if abs(event.pos[0] - point[1]) <= self.piece_radius and abs(event.pos[1] - point[2]) <= self.piece_radius:
                             self.selected_piece = point
                             self.team_one_turn = True
-                            print(f'the selected piece is {self.selected_piece}')
+                            # print(f'the selected piece is {self.selected_piece}')
                             break
                     for point in self.team_two_initial_coordinates:
                         if abs(event.pos[0] - point[1]) <= self.piece_radius and abs(event.pos[1] - point[2]) <= self.piece_radius:
                             self.selected_piece = point
                             self.team_one_turn = False
-                            print('here we are')
+                            # print('here we are')
+                            # print(self.team_one_turn)
                             break
 
                 elif event.type == pygame.MOUSEBUTTONUP:
@@ -55,18 +57,24 @@ class Checkers(Board, Pieces):
                         # Check if the move is valid
                         if self.selected_piece[0] == 'normal':
                             valid_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_one_turn, self.block_width)
-                            print(f'valid move for block width {self.block_width}? : {valid_move}')
-                            print(event.pos)
+                            # print(f'valid move for block width {self.block_width}? : {valid_move}')
+                            # print(event.pos)
                         else:
                             valid_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_one_turn, self.block_width, king=True)
 
                         # Update the position if the move is valid
                         if valid_move:
                             if self.team_one_turn:
-                                self._move_piece(self.display, self.team_one_colour, self.team_one_initial_coordinates, self.selected_piece, event.pos, self.block_width)
+                                self._move_piece(self.display, self.team_one_colour, self.team_one_initial_coordinates, self.selected_piece, event.pos, self.block_width, self.team_one_turn)
+                                # update self.team_one_turn
+                                self.team_one_turn = False
+                                # self.last_moved = None
+                                # print('yo')
                             else:
-                                print(self.team_two_colour)
-                                self._move_piece(self.display, self.team_two_colour, self.team_two_initial_coordinates, self.selected_piece, event.pos, self.block_width)
+                                self._move_piece(self.display, self.team_two_colour, self.team_two_initial_coordinates, self.selected_piece, event.pos, self.block_width, self.team_one_turn)
+                                # update self.team_one_turn
+                                self.team_one_turn = True
+                                # self.last_moved = 'one'
 
                         # Reset selection after move
                         self.selected_piece = None
