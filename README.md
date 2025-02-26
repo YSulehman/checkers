@@ -9,6 +9,9 @@ To launch a game run the following command: ```python main.py```. The main game 
 
 ## TO DO CHECKLIST
 
+Urgent: refactor checking if move is valid (pieces.py) and if it's a normal/take move (checkers_game.py)... redundancies in code logic currently. First check if
+y-coordinate is valid, then if angle is *close* to zero, i.e. between mouse position and current point, then num_squares to shift in y (and x) axes.
+
 1. make dedicated conda environment and install pygame (DONE)
 2. how to make/display board (DONE)
 3. how to add in movable pieces? (pieces added; make this code block more efficient and add in movability); pieces moving, can make more efficient later
