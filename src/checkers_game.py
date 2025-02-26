@@ -40,30 +40,30 @@ class Checkers(Board, Pieces):
                 if event.type == pygame.QUIT:
                     self.run_game = False
                 
-                # let's print a message if mouse is clicked
+                # if mouse is pressed
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # let's check if mouse position is on a piece
                     for point in self.team_one_initial_coordinates:
                         if abs(event.pos[0] - point[1]) <= self.piece_radius and abs(event.pos[1] - point[2]) <= self.piece_radius:
                             self.selected_piece = point
-                        
                             break
                     for point in self.team_two_initial_coordinates:
                         if abs(event.pos[0] - point[1]) <= self.piece_radius and abs(event.pos[1] - point[2]) <= self.piece_radius:
                             self.selected_piece = point
-                           
                             break
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if self.selected_piece:
                         # Check if the move is valid and if it's a normal or king piece moving
                         if self.selected_piece[0] == 'normal':
-                            valid_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_ones_move, self.block_width)
+                            valid_normal_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_ones_move, self.block_width)
+                            valid_take_move = self.valid_take_move(event.pos, self.selected_piece[1:], self.team_ones_move, self.block_width)
                         else:
-                            valid_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_ones_move, self.block_width, king=True)
+                            valid_normal_move = self.valid_normal_move(event.pos, self.selected_piece[1:], self.team_ones_move, self.block_width, king=True)
+                            valid_take_move = ''
 
                         # Update the position if the move is valid
-                        if valid_move:
+                        if valid_normal_move:
                             if self.team_ones_move:
                                 self._move_piece(self.display, self.team_one_colour, self.team_one_initial_coordinates, self.selected_piece, event.pos, self.block_width, self.team_ones_move)
                                 # update self.team_one_turn
@@ -75,19 +75,25 @@ class Checkers(Board, Pieces):
                                 # update self.team_one_turn
                                 self.team_ones_move = True
                                 
-                        else:
-                            pass
+                        elif valid_take_move:
+                            if self.team_ones_move:
+                                self._move_piece(self.display, self.team_one_colour, self.team_one_initial_coordinates, self.selected_piece, event.pos, self.block_width, self.team_ones_move)
+                                self.team_ones_move = False
+                            else:
+                                self._move_piece(self.display, self.team_two_colour, self.team_two_initial_coordinates, self.selected_piece, event.pos, self.block_width, self.team_ones_move)
+                                self.team_ones_move = True
                            
                     
                         # Reset selection after move
                         self.selected_piece = None
-                        pygame.display.update()
+                        # pygame.display.update()
 
                     # basically check if point is in team 1 or 2, check who's move it is,
                     # track mouse move movement, mousebuttonup and if move is valid
                 elif event.type == pygame.MOUSEMOTION:
                     pass
 
+            pygame.display.update()
                   
     def _display_message(self, text: str):
         # render text and box containing text

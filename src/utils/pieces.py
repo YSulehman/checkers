@@ -1,4 +1,6 @@
 import pygame
+import math
+import numpy as np
 
 class Pieces:
     team_one_colour = (165,42,42)
@@ -74,20 +76,21 @@ class Pieces:
         """
        # Find the correct tuple and remove it
         team_coordinates[:] = [item for item in team_coordinates if not (item[1] == current_point[1] and item[2] == current_point[2])]
-        # for item in team_coordinates:
-        #     if item[1] == current_point[1] and item[2] == current_point[2]:  # Match x, y
-        #         team_coordinates.remove(item)
-        #         break  # Exit loop once removed
+        # figure out how many multiples of block width we've shifted
+        # print(abs(current_point[1] - new_point[0]))
+        # print(block_width)
+        num_blocks = round(abs(current_point[1] - new_point[0]) / block_width)
+        # print(f'num_blocks: {num_blocks}')
 
         # Compute new coordinates
         if team_one_turn:
-            new_y = current_point[2] + block_width
+            new_y = current_point[2] + num_blocks * block_width
         else:
-            new_y = current_point[2] - block_width
+            new_y = current_point[2] - num_blocks * block_width
         if new_point[0] < current_point[1]:
-            new_x = current_point[1] - block_width
+            new_x = current_point[1] - num_blocks * block_width
         else:
-            new_x = current_point[1] + block_width
+            new_x = current_point[1] + num_blocks * block_width
 
         # Add the updated piece
         team_coordinates.append(('normal', new_x, new_y))
@@ -98,7 +101,22 @@ class Pieces:
         
 
     def valid_take_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
-        pass
+        if king:
+            pass
+        elif team_one:
+            # just testing something: basically we're moving along a diagonal, so can check if angle is close to zero.
+            angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
+            # print(angles_radians)
+            if 0 <= angles_radians <= 0.65:
+                return True
+        else:
+            # just testing something
+            angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
+            # print(angles_radians)
+            if 0 <= angles_radians <= 0.65:
+                return True
+
+        return False
 
     def valid_normal_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
         """
@@ -112,29 +130,31 @@ class Pieces:
                 # standard move (not taking)
                 # first inequality checks valid y-coord within limits,
                 # second inequality checks valid x-coord within limits.
-                if block_width / 2 <= new_position[1] - current_position[1] <= 3 / 2 * block_width and abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+                if block_width / 2 <= new_position[1] - current_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
                     # return True if the square is free and not occupied (by either same team piece of opposing team)
                     for point in self.team_one_initial_coordinates:
                         if point == current_position:
                             continue
-                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self. piece_radius:
+                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
                             return False
                     for point in self.team_two_initial_coordinates:
-                        if point == current_position:
-                            continue
-                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self. piece_radius:
+                        # if point == current_position:
+                        #     continue
+                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
                             return False 
                     return True  
                 
             if not team_one:
                 # same logic as for team one, except new y-coord should be less than current
-                if block_width / 2  <= current_position[1] - new_position[1] <= 3 / 2 * block_width and abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+                if block_width / 2  <= current_position[1] - new_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
                     # return True if the square is free and not occupied (by either same team piece of opposing team)
                     for point in self.team_one_initial_coordinates:
-                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self.piece_radius:
+                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
                             return False
                     for point in self.team_two_initial_coordinates:
-                        if abs(new_position[0] - point[1]) <= self.piece_radius and abs(new_position[1] - point[2]) <= self.piece_radius:
+                        if point == current_position:
+                            continue
+                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
                             return False 
                     return True 
         return False
