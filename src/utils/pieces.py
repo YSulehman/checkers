@@ -70,7 +70,8 @@ class Pieces:
         )
     )
 
-    def _move_piece(self, display, colour, team_coordinates: list[tuple], current_point: tuple, new_point: tuple, block_width: int, team_one_turn: bool):
+    def _move_piece(self, display, colour, team_coordinates: list[tuple], current_point: tuple, new_point: tuple, block_width: int, team_one_turn: bool,
+                    opposition_pieces_to_take: list[tuple]):
         """
         draws new piece (colour corresponding to correct team) based on new point. current_point e.g. : ('normal, x, y)
         """
@@ -97,22 +98,37 @@ class Pieces:
         # draw new circle last 
         self._remove_piece(display, self.black_colour, current_point[1:], block_width)
         self._draw_piece(display, colour, (new_x, new_y), self.piece_radius)
-        # self._remove_piece(display, self.black_colour, current_point[1:], block_width)
+
+        # remove any opposition pieces  if applicable 
+        if len(opposition_pieces_to_take) != 0:
+            for piece in opposition_pieces_to_take:
+                # removing pieces
+                print('heyyy')
+                self._remove_piece(display, self.black_colour, piece[1:], block_width)
+        
         
 
-    def valid_take_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
+    def valid_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
         if king:
             pass
         elif team_one:
+            # check y coordinate has increased
+            if new_position[1] <= current_position[1]:
+                return False
+
             # just testing something: basically we're moving along a diagonal, so can check if angle is close to zero.
             angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
             # print(angles_radians)
             if 0 <= angles_radians <= 0.65:
                 return True
         else:
+            # check y coordinate is decreasing
+            if new_position[1] >= current_position[1]:
+                return False
+
             # just testing something
             angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
-            # print(angles_radians)
+            print(angles_radians)
             if 0 <= angles_radians <= 0.65:
                 return True
 

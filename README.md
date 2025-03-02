@@ -9,8 +9,9 @@ To launch a game run the following command: ```python main.py```. The main game 
 
 ## TO DO CHECKLIST
 
-Urgent: refactor checking if move is valid (pieces.py) and if it's a normal/take move (checkers_game.py)... redundancies in code logic currently. First check if
-y-coordinate is valid, then if angle is *close* to zero, i.e. between mouse position and current point, then num_squares to shift in y (and x) axes.
+Progress on multiple-jump take moves by utilising mouse tracking... Next:
+1. angle tracking for valid moves; what range should it fall within for each team?
+2. Updating position of moving piece for multiple-jump move?
 
 1. make dedicated conda environment and install pygame (DONE)
 2. how to make/display board (DONE)
