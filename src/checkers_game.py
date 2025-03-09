@@ -96,6 +96,10 @@ class Checkers(Board, Pieces):
                                                  event.pos, self.block_width, self.team_ones_move, self.opp_pieces_taken)
                                 # update self.team_one_turn
                                 self.team_ones_move = True
+
+                        # if not valid move move onto next event
+                        else:
+                            continue
                            
                     
                         # remove any taken pieces from opposing team

@@ -103,18 +103,32 @@ class Pieces:
         if len(opposition_pieces_to_take) != 0:
             for piece in opposition_pieces_to_take:
                 # removing pieces
-                print('heyyy')
+                # print('heyyy')
                 self._remove_piece(display, self.black_colour, piece[1:], block_width)
         
         
 
     def valid_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
+        # for debugging
+        # x = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
+        # print(f'Team one move? {team_one}. Angle between old and new position is: {x}')
+        # all pieces have to stay within the board
+        if new_position[0] <= 0 or new_position[0] >= block_width * 8:
+            return False 
+        
+        if new_position[1] <= 0 or new_position[1] >= block_width * 8:
+            return False
+
         if king:
             pass
         elif team_one:
             # check y coordinate has increased
-            if new_position[1] <= current_position[1]:
-                return False
+            # if new_position[1] <= current_position[1]:
+            #     return False
+            
+            # should the above be
+            if new_position[1] - current_position[1] <= block_width / 2:
+                return False 
 
             # just testing something: basically we're moving along a diagonal, so can check if angle is close to zero.
             angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
@@ -123,12 +137,15 @@ class Pieces:
                 return True
         else:
             # check y coordinate is decreasing
-            if new_position[1] >= current_position[1]:
+            # if new_position[1] >= current_position[1]:
+            #     return False
+            
+            if current_position[1] - new_position[1] <= block_width / 2 :
                 return False
 
             # just testing something
             angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
-            print(angles_radians)
+            # print(angles_radians)
             if 0 <= angles_radians <= 0.65:
                 return True
 
