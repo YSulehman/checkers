@@ -63,12 +63,10 @@ class Checkers(Board, Pieces):
                     # check if mouse position moves opposition piece and track
                     if self.team_ones_move:
                         self._opposition_pieces_taken(event.pos, self.team_two_initial_coordinates)
-                        # print('yo')
-                        # print(self.opp_pieces_taken)
+                       
                     else:
                         self._opposition_pieces_taken(event.pos, self.team_one_initial_coordinates)
-                        # print('no')
-                        # print(self.opp_pieces_taken)
+                        
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.mouse_down_tracker = False
@@ -99,6 +97,7 @@ class Checkers(Board, Pieces):
 
                         # if not valid move move onto next event
                         else:
+                            self.opp_pieces_taken = []
                             continue
                            
                     
@@ -110,7 +109,7 @@ class Checkers(Board, Pieces):
 
                         # Reset selection after move and opposition team
                         self.selected_piece = None
-                        self.opp_team = None
+                        # self.opp_team = None
                         self.opp_pieces_taken = []
                         # pygame.display.update()
 

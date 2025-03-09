@@ -110,8 +110,8 @@ class Pieces:
 
     def valid_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
         # for debugging
-        # x = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
-        # print(f'Team one move? {team_one}. Angle between old and new position is: {x}')
+        x = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
+        print(f'Team one move? {team_one}. Angle between old and new position is: {x}')
         # all pieces have to stay within the board
         if new_position[0] <= 0 or new_position[0] >= block_width * 8:
             return False 
@@ -135,6 +135,10 @@ class Pieces:
             # print(angles_radians)
             if 0 <= angles_radians <= 0.65:
                 return True
+            
+            # multiple jump move but left-right or right left (need to check)
+            if abs(new_position[0] - current_position[0]) < block_width and new_position[1] - current_position[1] >= 3 * block_width:
+                return True  
         else:
             # check y coordinate is decreasing
             # if new_position[1] >= current_position[1]:
@@ -147,6 +151,10 @@ class Pieces:
             angles_radians = math.acos(np.dot(current_position, new_position) / (np.linalg.norm(new_position) * np.linalg.norm(current_position)))
             # print(angles_radians)
             if 0 <= angles_radians <= 0.65:
+                return True
+            
+             # multiple jump move but left-right or right left
+            if abs(new_position[0] - current_position[0]) < block_width and current_position[1] - new_position[1] >= 3 * block_width:
                 return True
 
         return False
