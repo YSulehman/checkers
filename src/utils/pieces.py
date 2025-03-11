@@ -159,48 +159,47 @@ class Pieces:
 
         return False
 
-    def valid_normal_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
-        """
-        given current position, checks if new position is valid based on team and normal/king piece.
-        """
-        if king:
-            pass
-        else:
-            # now break into team one and team two
-            if team_one:
-                # standard move (not taking)
-                # first inequality checks valid y-coord within limits,
-                # second inequality checks valid x-coord within limits.
-                if block_width / 2 <= new_position[1] - current_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
-                    # return True if the square is free and not occupied (by either same team piece of opposing team)
-                    for point in self.team_one_initial_coordinates:
-                        if point == current_position:
-                            continue
-                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
-                            return False
-                    for point in self.team_two_initial_coordinates:
-                        # if point == current_position:
-                        #     continue
-                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
-                            return False 
-                    return True  
+    # def valid_normal_move(self, new_position: tuple, current_position: tuple, team_one: bool, block_width: int, king: bool = False):
+    #     """
+    #     given current position, checks if new position is valid based on team and normal/king piece.
+    #     """
+    #     if king:
+    #         pass
+    #     else:
+    #         # now break into team one and team two
+    #         if team_one:
+    #             # standard move (not taking)
+    #             # first inequality checks valid y-coord within limits,
+    #             # second inequality checks valid x-coord within limits.
+    #             if block_width / 2 <= new_position[1] - current_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+    #                 # return True if the square is free and not occupied (by either same team piece of opposing team)
+    #                 for point in self.team_one_initial_coordinates:
+    #                     if point == current_position:
+    #                         continue
+    #                     if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
+    #                         return False
+    #                 for point in self.team_two_initial_coordinates:
+    #                     # if point == current_position:
+    #                     #     continue
+    #                     if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
+    #                         return False 
+    #                 return True  
                 
-            if not team_one:
-                # same logic as for team one, except new y-coord should be less than current
-                if block_width / 2  <= current_position[1] - new_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
-                    # return True if the square is free and not occupied (by either same team piece of opposing team)
-                    for point in self.team_one_initial_coordinates:
-                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
-                            return False
-                    for point in self.team_two_initial_coordinates:
-                        if point == current_position:
-                            continue
-                        if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
-                            return False 
-                    return True 
-        return False
+    #         if not team_one:
+    #             # same logic as for team one, except new y-coord should be less than current
+    #             if block_width / 2  <= current_position[1] - new_position[1] <= 3 / 2 * block_width and block_width / 2 <= abs(new_position[0] - current_position[0]) <= 3 /2 * block_width:
+    #                 # return True if the square is free and not occupied (by either same team piece of opposing team)
+    #                 for point in self.team_one_initial_coordinates:
+    #                     if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
+    #                         return False
+    #                 for point in self.team_two_initial_coordinates:
+    #                     if point == current_position:
+    #                         continue
+    #                     if abs(new_position[0] - point[1]) <= block_width / 2 and abs(new_position[1] - point[2]) <= block_width / 2:
+    #                         return False 
+    #                 return True 
+    #     return False
             
-
 
     def make_king(self):
         pass

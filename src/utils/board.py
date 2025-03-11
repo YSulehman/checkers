@@ -22,5 +22,6 @@ class Board:
                     pygame.draw.rect(display, self.brown, block)
                 else:
                     pygame.draw.rect(display, self.black, block)
-    
+
+
     

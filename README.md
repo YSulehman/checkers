@@ -9,8 +9,7 @@ To launch a game run the following command: ```python main.py```. The main game 
 
 ## TO DO CHECKLIST
 
-The current check for valid moves has some bugs: can move directly on a piece and take, 
-multiple-take diagonal move not working for team one- suspect issue with valid angle range
+latest thought: abandon valid angle aproach and make a tree structure for selected piece?
 
 1. angle tracking for valid moves; what range should it fall within for each team?
 2. Updating position of moving piece for multiple-jump move?
